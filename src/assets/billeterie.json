@@ -1,0 +1,30 @@
+{
+    "data": [
+        {
+            "id":1,
+            "name":"Bordeaux",
+            "placeAvailable":2000,
+            "dateDebutEvenement":"10-12-2023",
+            "dateFinEvenement":"14-12-2023",
+            "prixUnit":25,
+            "prixPass":100
+        },
+        {
+            "id":2,
+            "name":"Lyon",
+            "placeAvailable":1000,
+            "dateDebutEvenement":"20-04-2023",
+            "dateFinEvenement":"23-04-2023",
+            "prixUnit":20,
+            "prixPass":50
+        },{
+            "id":3,
+            "name":"Lille",
+            "placeAvailable":500,
+            "dateDebutEvenement":"03-06-2023",
+            "dateFinEvenement":"04-06-2023",
+            "prixUnit":15,
+            "prixPass":25
+        }
+    ]
+}
