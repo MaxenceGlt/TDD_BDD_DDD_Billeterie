@@ -6,13 +6,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'ConnectionComposent',
       component: () => import('../views/ConnectionView.vue')
     },
     {
-      path: '/connection',
-      name: 'ConnectionComposent',
-      component: () => import('../views/ConnectionView.vue')
+      path: '/home',
+      name: 'HomeComposent',
+      component: () => import('../views/HomeView.vue')
     },
     {
       path: '/about',
@@ -28,11 +28,29 @@ const router = createRouter({
       component: () => import('../views/BilleterieView.vue')
     },
     {
-      path: '/ticketForm',
-      name: 'ticketFormComposent',
-      component: () => import('../views/TicketForm.vue')
+      path: '/admin',
+      name: 'AdminComposent',
+      component: () => import('../views/AdminView.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/admin') {
+    // Récuperer l'info de si l'utilisateur est un admin
+    const isAuthenticated = true// Logique d'authentification ici
+
+    if(!isAuthenticated) {
+      // Redirigez l'utilisateur vers une autre page ou affichez un message d'erreur
+      next('/home');
+    } else {
+      // L'utilisateur est authentifié, autorisez l'accès à l'URL restreinte
+      next();
+    }
+  } else {
+    // Laissez l'accès à toutes les autres URLs
+    next();
+  }
+});
 
 export default router

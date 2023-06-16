@@ -5,10 +5,7 @@
 
 
 #app {
-  max-width: 1280px;
-  padding: 2rem;
-
-  font-weight: normal;
+  
 }
 
 a,
@@ -27,4 +24,66 @@ a,
 @media (min-width: 1024px) {
   body {
   }
+}
+
+@font-face {
+  font-family: "Cavilant";
+  src: url("./font/Cavilant.otf");
+}
+
+@font-face {
+  font-family: "ColateraSoft";
+  src: url("./font/ColateraSoft.ttf");
+}
+
+@font-face {
+  font-family: "BlueHighway";
+  src: url("./font/blueHighway.ttf");
+}
+
+@font-face {
+  font-family: "Heavitas";
+  src: url("./font/Heavitas.ttf");
+}
+
+@font-face {
+  font-family: "Spiegel";
+  src: url("./font/spiegel.otf");
+}
+
+@font-face {
+  font-family: "Spiegel_bold";
+  src: url("./font/Spiegel_bold.otf");
+}
+
+.font-quizz {
+  font-family: 'Fascinate', cursive;
+}
+
+.font-title {
+  font-family: 'Cavilant', sans-serif;
+}
+
+.font-text2 {
+  font-family: 'BlueHighway', sans-serif;
+}
+
+.font-spegiel {
+  font-family: 'Spiegel', sans-serif;
+}
+.font-spegiel-bold {
+  font-family: 'Spiegel_bold', sans-serif;
+}
+
+.font-spegiel-bold-nav {
+  font-family: 'Spiegel_bold', sans-serif;
+  font-size: 1.5rem !important;
+}
+
+.font-texxt {
+  font-family: 'ColateraSoft', sans-serif;
+}
+
+.font-card-title {
+  font-family: 'Heavitas', sans-serif;
 }
