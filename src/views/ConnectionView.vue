@@ -5,7 +5,7 @@
       <form class="m-10" @submit="login">
         <div class="flex-raws p-2">
           <label class="text-sm font-title text-cyan-300" for="username">Email</label>
-          <input class="font-bold h-10 w-full shadow-2xl rounded-xl font-texxt text-xl placeholder-white bg-transparent text-white border border-blue-200 outline-0 md:text-xl lg:text-xl xl:text-2xl" type="text" id="username" v-model="username" required>
+          <input class="font-bold h-10 w-full shadow-2xl rounded-xl font-texxt text-xl placeholder-white bg-transparent text-white border border-blue-200 outline-0 md:text-xl lg:text-xl xl:text-2xl" type="email" id="email" v-model="email" required>
         </div>
         <br>
         <div class="flex-raws p-2">
@@ -17,6 +17,7 @@
           <button class="button p-4 hover:bg-gray-400 bg-cyan-300 py-2 text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative block md:py-2 md:text-sm lg:text-base xl:text-xl" type="submit">Se connecter</button>
         </div>
       </form>
+      <p v-if="error">{{ error }}</p>
     </div>
 </div>
 </template>
@@ -25,28 +26,31 @@
 import axios from 'axios';
 
 export default {
+  
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       error: ''
     };
   },
   methods: {
-    login(event) {
+    async login(event) {
       event.preventDefault();
-      
       // Vérification des informations de connexion
-      axios.post('/login', { username: this.username, password: this.password })
+      await axios.post('http://localhost:8080/api/users/login',null, {params:{email: this.email, password: this.password }})
         .then(response => {
           // Succès de la vérification
           const data = response.data;
-          if (data.success) {
+          if (response.status===200) {
+            console.log("success")
             // Stockage de la variable de session
-            sessionStorage.setItem('loggedIn', true);
-            
+            sessionStorage.setItem('loggedIn', data.email);
+            if(data.isAdmin){
+              sessionStorage.setItem('isAdmin', true)
+            }
             // Redirection vers une autre page
-            this.$router.push('/dashboard');
+            this.$router.push('/home');
           } else {
             // Affichage du message d'erreur
             this.error = data.message;

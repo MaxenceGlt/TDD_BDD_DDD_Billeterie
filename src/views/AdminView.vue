@@ -1,4 +1,7 @@
 <template>
+  <div class="grid">
+    <button className="button place-self-end hover:bg-gray-400 bg-cyan-300 py-2 w-2/12 h-16 place-content-center text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative md:py-2 md:text-sm lg:text-base xl:text-xl"  @click="disconnect()">Déconnexion</button>
+  </div>
     <div class="about">
       <h1>Pannel administrateur</h1>
       <div>
@@ -78,6 +81,11 @@ export default {
   methods: {
     getEvenementInformation(){
         //Appel API pour récuperer les informations des événements
+    },
+    disconnect(){
+      sessionStorage.removeItem('isAdmin');
+      sessionStorage.removeItem('loggedIn');
+      this.$router.push('/');
     }
   }
 };

@@ -1,43 +1,70 @@
 <template>
-  <div className="w-full mt-10" class="about">
+    <div class="grid">
+        <button className="button place-self-end hover:bg-gray-400 bg-cyan-300 py-2 w-2/12 h-16 place-content-center text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative md:py-2 md:text-sm lg:text-base xl:text-xl"  @click="disconnect()">Déconnexion</button>
+    </div>  
+    <div className="w-full mt-10" class="about">
     <div className="flex justify-center text-3xl">
         <h1 className="text-2xl font-title place-self-center text-cyan-300 md:text-4xl lg:text-5xl xl:text-6xl">Billeterie des événements</h1>
     </div>
     <br>
     <div className="w-full grid grid-rows-1 grid-cols-5 gap-3" v-if="!evenementChose">
-        <div className="hover:scale-105 transform transition duration-500" v-for="(item, index) in myjson">
+        <div className="hover:scale-105 transform transition duration-500" v-for="(item, index) in this.evenementInformation">
             <div class="{{item.name}} grid border rounded-lg p-4">
-                <span class="text-xl text-cyan-300 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">{{item.name}}</span>
+                <span class="text-xl text-cyan-300 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">{{item.locationEvent}}</span>
                 <div className='px-16'>
                     <hr className='mb-2'>
                 </div> 
                 <img class="rounded-xl" :src="lyonEsportImg">
                 <br>
-                <div class="grid grid-rows-2 grid-cols-1 md:grid md:grid-cols-1 md:grid-rows-1">
-                    <span class="text-gray-300 text-xs md:text-lg lg:text-xl xl:text-2xl">Nombre de place restante : </span><span class="text-cyan-300 text-xs bold md:text-xl lg:text-2xl xl:text-3xl">{{ item.placeAvailable }}</span>
+                <span class="text-lg text-cyan-300 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-lg xl:text-xl">{{item.nameEvent}}</span>
+                <br>
+                <div class="grid grid-rows-2 grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-1">
+                    <span class="text-gray-300 text-xs md:text-xs lg:text-xl xl:text-2xl">Du </span><span class="text-cyan-300 text-xs bold md:text-sm lg:text-2xl xl:text-xl">{{ item.startDate }}</span>
+                    <span class="text-gray-300 text-xs md:text-xs lg:text-xl xl:text-2xl">au </span><span class="text-cyan-300 text-xs bold md:text-sm lg:text-2xl xl:text-xl">{{ item.endDate }}</span>
+
                 </div>
                 <br>
-                <div class="grid grid-rows-2 grid-cols-1 md:grid md:grid-cols-1 md:grid-rows-1">
-                    <span class="text-gray-300 text-xs md:text-lg lg:text-xl xl:text-2xl">Nombre de pass restant : </span><span class="text-cyan-300 text-xs bold md:text-xl lg:text-2xl xl:text-3xl">{{ item.placeAvailable }}</span>
+                <div class="grid grid-rows-2 grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-1">
+                    <span class="text-gray-300 text-xs md:text-xs lg:text-xl xl:text-xl">A partir de</span><span class="text-cyan-300 text-xs bold md:text-xs lg:text-2xl xl:text-xl">{{ item.minimumPrice }} $</span>
                 </div>
-                <button className="button p-4 hover:bg-gray-400 bg-cyan-300 py-2 text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative block md:py-2 md:text-sm lg:text-base xl:text-xl" :value="item.name" @click="(e) => displayDetailBilleterie(e.target.value)">Acheter</button>
+                <br>
+                <div class="grid grid-rows-2 grid-cols-1 md:grid md:grid-cols-2 md:grid-rows-1">
+                    <span class="bold text-gray-300 text-xs md:text-xs lg:text-sm xl:text-sm">Prix du multi Pass</span><span class="text-cyan-300 text-xs bold md:text-xs lg:text-2xl xl:text-xl">{{ item.multiPassPrice }} $</span>
+                </div>
+                <button className="button p-4 hover:bg-gray-400 bg-cyan-300 py-2 text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative block md:py-2 md:text-sm lg:text-base xl:text-xl" :value="item.idEvent" @click="(e) => displayDetailBilleterie(e.target.value)">Acheter</button>
             </div>
         </div>
     </div>
     <div v-if="evenementChose">
         <div class="grid" v-if="!displayPanierToggle">
             <p class="text-sm font-texxt text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl">Vous allez reserver pour l'événement : </p>
-            <h2 class="text-sm font-text2 text-gray-200 text-center md:text-xl lg:text-3xl xl:text-4xl">{{ data.name }}</h2>
+            <h2 class="text-sm font-text2 text-gray-200 text-center md:text-xl lg:text-3xl xl:text-4xl">{{ this.eventInformation.name }}</h2>
             <br>
             <div class="grid grid-rows-1 grid-cols-6">
                 <div class="col-start-2 col-end-5">
-                    <span class="text-sm font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl">Prix des places : {{ data.prixUnit }}</span>
+                    <span class="text-sm font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl">Prix des places :</span>
+                    <table className="min-w-full border border-gray-300 bg-gray-500 ">
+                        <thead>
+                            <tr class="border-b border-cyan-300 rounded-xl">
+                                <th className="text-xl p-2 text-cyan-300 bg-gray-700 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">Date</th>
+                                <th className="text-xl p-2 text-cyan-300 bg-gray-700 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">Prix</th>
+                                <th className="text-xl p-2 text-cyan-300 bg-gray-700 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">Place(s) restantes(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(billets, index) in this.eventInformation.datesEvent" :key="index">
+                                <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ billets.date }}</td>
+                                <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ billets.price }}</td>
+                                <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ billets.placeMax }}</td>
+                            </tr>
+                        </tbody>
+                    </table>  
                     <form @submit="bought">
                         <div className="flex gap-2 items-center" v-for="(titulaire, index) in titulaires" :key="index">
                             <label class="text-xs font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="date">Date</label>
-                            <select class="font-bold h-6  bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-sm placeholder-white text-white border border-blue-200 outline-0 md:text-sm lg:text-lg xl:text-xl" @change="dateChanged()" v-model="titulaire.date" required>
+                            <select class="font-bold h-6  bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-sm placeholder-white text-white border border-blue-200 outline-0 md:text-sm lg:text-lg xl:text-xl" @change="(e)=>handleDateChanged(e)" v-model="this.eventDetail" required>
                                 <option class="0" disabled value="">Jour</option>
-                                <option   :value="data.dateDebutEvenement">{{ data.dateDebutEvenement }}</option>
+                                <option v-for="date in this.eventInformation.datesEvent" :key="date.id" :value="date">{{date.date}}</option>
                             </select>                 
                             <label class="text-xs font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="name">Nom</label>
                             <input className="font-bold h-6 p-2 bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-xl placeholder-white text-white border border-blue-200 outline-0 md:text-xl lg:text-xl xl:text-2xl" type="name" id="name" v-model="titulaire.name" required>
@@ -48,8 +75,9 @@
                         </div>
                         <br>
                         <button className="button hover:bg-gray-400 bg-cyan-300 py-2 w-full text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative block md:py-2 md:text-sm lg:text-base xl:text-xl" @click="ajouterTitulaire()">Ajouter un titulaire</button>
+
                         <br>
-                        <span class="text-sm font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl">Prix des PASS : {{ data.prixPass }}</span>
+                        <span class="text-sm font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl">Prix des PASS : {{ }}</span>
                         <br>
                         <div className="flex gap-2 items-center" v-for="(titulairePass, index) in titulairesPass" :key="index">
                             <label class="text-xs font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="name">Nom</label>
@@ -80,7 +108,7 @@
         <label v-if="!titulaires.length==0" class="grid ml-64 justify-start text-sm font-texxt text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="name">Vos billet(s)</label>
         <div class="grid grid-cols-5 justify-center w-full">
             <div className="flex gap-2 items-center col-start-2 col-end-5">
-                <table className="min-w-full border border-gray-300 bg-gray-500 " v-for="(titulaire, index) in titulaires" :key="index">
+                <table className="min-w-full border border-gray-300 bg-gray-500 " >
                     <thead>
                         <tr class="border-b border-cyan-300 rounded-xl">
                             <th className="text-xl p-2 text-cyan-300 bg-gray-700 place-self-center font-spegiel-bold uppercase md:text-2xl lg:text-3xl xl:text-4xl">Date</th>
@@ -90,7 +118,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr >
+                        <tr v-for="(titulaire, index) in titulaires" :key="index">
                             <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ titulaire.date }}</td>
                             <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ titulaire.name }}</td>
                             <td className="text-xl p-2 border-r border-cyan-300 bg-gray-500 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-xl xl:text-2xl text-center">{{ titulaire.prenom }}</td>
@@ -99,7 +127,7 @@
                             </div>
                         </tr>
                     </tbody>
-                </table>  
+                </table>
             </div>
         </div>
         <br>
@@ -131,6 +159,7 @@
         <div class="grid grid-rows-1 grid-cols-4">
                 <div class="col-start-2 col-end-4"><spans class="text-gray-300 font-text2 text-2xl md:text-2xl lg:text-3xl xl:text-5xl">Total : </spans><span class="text-cyan-300 font-text2 text-xl bold md:text-3xl lg:text-4xl xl:text-5xl">{{ this.prixTotal }} $</span></div>
         </div>
+        <button class="button hover:bg-gray-400 bg-cyan-500 py-2 w-4/12 text-2xl text-center font-bold font-spegiel-bold text-white uppercase rounded relative block md:py-2 md:text-sm lg:text-base xl:text-xl" @click="validatePanier()">Valider</button>
     </div> 
 </div>
 </template>
@@ -138,54 +167,75 @@
 <script>
 import axios from 'axios';
 import lyonEsportImg from "../assets/LyonEsport.jpeg"
-import json from "../assets/billeterie.json"
 
 export default {
   data() {
     return {
       evenementInformation: [],
+      eventInformation: [],
+      eventIdSelected:0,
       evenementChose: false,
       displayPanierToggle: false,
       lyonEsportImg: lyonEsportImg,  
-      myjson: json.data,
-      data:"",
       titulaires: [],
       titulairesPass: [],
-      prixTotal: 0
+      prixTotal: 0,
+      previousPrice:0,
+      eventDetail:[]
     };
   },
   created() {
     this.getEvenementInformation();
   },
   methods: {
-    getEvenementInformation(){
+    async getEvenementInformation(){
         //Créer un appel api pour récuperer les données des evenements (événements globaux)
-    },
-    displayDetailBilleterie(value){
-        this.evenementChose = true;
-        this.data = this.myjson.find(e => e.name===value);
-        //Appeler a nouveau l'API en passant dans la requete http le nom de l'evenement pour recevoir les bonnes informations
-
-    },
-    mounted() {
-        axios.get($apiURL)
+        await axios.get('http://localhost:8080/api/home/getEvents')
         .then(response => {
-            this.evenementInformation = response.data;
+        // Succès de la vérification
+        this.evenementInformation = response.data;
+        if (response.status===200) {
+            console.log(this.evenementInformation)
+
+        } else {
+            // Affichage du message d'erreur
+            this.error = data.message;
+        }
         })
         .catch(error => {
-            console.error(error);
+        // Erreur lors de la requête
+        this.error = 'Une erreur s\'est produite lors de la récupération des evenements.';
+        console.error(error);
+        }); 
+    },
+    async displayDetailBilleterie(value){
+        this.evenementChose = true;
+        this.eventIdSelected = value;
+        //Récupération de l'événement séléctionné
+        await axios.get('http://localhost:8080/api/event/getDetails', {params:{id: value}})
+        .then(response => {
+          // Succès de la vérification
+          this.eventInformation = response.data;
+        })
+        .catch(error => {
+          // Erreur lors de la requête
+          this.error = 'Une erreur s\'est produite lors de la récupération de l\'événement.';
+          console.error(error);
         });
+
     },
-    bought() {
-      //Récupération des deux lists Titulaires et TitulairePass
-    },
-    dateChanged(){
+    handleDateChanged(e){
+        console.log(this.eventDetail)
+        this.titulaires.map
         //Suivant le jour selectionner -> faire apparaitre le bon prix
-        this.prixTotal = this.prixTotal + this.data.prixUnit;
+        this.prixTotal = this.prixTotal + this.eventDetail.price;
+        this.prixTotal = this.prixTotal - this.previousPrice;
+        this.previousPrice = this.eventDetail.price;
     },
     ajouterTitulaire() {
       const nouvelId = this.titulaires.length + 1;
-      this.titulaires.push({ id: nouvelId, date: '', name: '', prenom: '' });
+      this.titulaires.push({ id: nouvelId, date: '', name: '', prenom: '', isMultipass: false });
+      this.previousPrice = 0;
     },
     supprimerTitulaire(titulaire) {
         if((titulaire.date !== '') && (titulaire.name !== '') && (titulaire.prenom !== '')){
@@ -195,21 +245,38 @@ export default {
         }else if((titulaire.date !== '') && ((titulaire.name == '') || (titulaire.prenom == '')) ){
             this.prixTotal = this.prixTotal - this.data.prixUnit;
         }
-        console.log(titulaire)
         this.titulaires = this.titulaires.filter(item => item.id !== titulaire.id);
     },
     ajouterTitulairePass() {
       const nouvelId = this.titulairesPass.length + 1;
-      this.titulairesPass.push({ id: nouvelId, date: '', name: '', prenom: '' });
-      this.prixTotal = this.prixTotal + this.data.prixPass;
+      this.titulairesPass.push({ id: nouvelId, date: '', name: '', prenom: '', isMultipass: true});
+      this.prixTotal = this.prixTotal + this.eventInformation.multiPassPrice;
     },
     supprimerTitulairePass(titulairePass) {
         this.titulairesPass = this.titulairesPass.filter(item => item.id !== titulairePass.id);
-        this.prixTotal = this.prixTotal - this.data.prixPass;
+        this.prixTotal = this.prixTotal - this.eventInformation.multiPassPrice;
     },
     displayPanier(){
-        console.log(this.titulaires)
         this.displayPanierToggle = true;
+        const listOfBillet = [...this.titulaires, ...this.titulairesPass]
+        console.log(listOfBillet)
+    },
+    async validatePanier(){
+        await axios.post('http://localhost:8080/api/event/buy', {params:{idEvent:this.eventIdSelected, user:sessionStorage.getItem("loggedIn"), listOfBillet:listOfBillet}})
+        .then(response => {
+          // Succès de la vérification
+          this.eventInformation = response.data;
+        })
+        .catch(error => {
+          // Erreur lors de la requête
+          this.error = 'Une erreur s\'est produite lors de la récupération de l\'événement.';
+          console.error(error);
+        });
+    },
+    disconnect(){
+      sessionStorage.removeItem('isAdmin');
+      sessionStorage.removeItem('loggedIn');
+      this.$router.push('/');
     }
 }
 };
