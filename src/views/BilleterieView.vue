@@ -62,9 +62,9 @@
                     <form @submit="bought">
                         <div className="flex gap-2 items-center" v-for="(titulaire, index) in titulaires" :key="index">
                             <label class="text-xs font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="date">Date</label>
-                            <select class="font-bold h-6  bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-sm placeholder-white text-white border border-blue-200 outline-0 md:text-sm lg:text-lg xl:text-xl" @change="(e)=>handleDateChanged(e)" v-model="this.eventDetail" required>
+                            <select class="font-bold h-6  bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-sm placeholder-white text-white border border-blue-200 outline-0 md:text-sm lg:text-lg xl:text-xl" @change="(e)=>handleDateChanged(e)" v-model="titulaire.date" required>
                                 <option class="0" disabled value="">Jour</option>
-                                <option v-for="date in this.eventInformation.datesEvent" :key="date.id" :value="date">{{date.date}}</option>
+                                <option v-for="date in this.eventInformation.datesEvent" :key="date.id" :value="date.date">{{date.date}}</option>
                             </select>                 
                             <label class="text-xs font-text2 text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="name">Nom</label>
                             <input className="font-bold h-6 p-2 bg-gray-600 w-full shadow-2xl rounded-xl font-texxt text-xl placeholder-white text-white border border-blue-200 outline-0 md:text-xl lg:text-xl xl:text-2xl" type="name" id="name" v-model="titulaire.name" required>
@@ -132,8 +132,8 @@
         </div>
         <br>
         <label v-if="!titulairesPass.length==0" class="grid ml-64 justify-start text-sm font-texxt text-gray-200 text-center md:text-lg lg:text-xl xl:text-2xl" for="name">Vos pass</label>
-        <div class="grid grid-cols-5 justify-center w-full">
-            <div className="flex gap-2 items-center col-start-2 col-end-5">
+        <div class="grid grid-cols-8 justify-center w-full">
+            <div className="flex gap-2 items-center col-start-3 col-end-7">
                 <table className="min-w-full bg-gray-400 border border-gray-300" v-for="(titulairePass, index) in titulairesPass" :key="index">
                     <thead>
                         <tr class="border-b border-cyan-300 rounded-xl">
@@ -225,12 +225,13 @@ export default {
 
     },
     handleDateChanged(e){
-        console.log(this.eventDetail)
-        this.titulaires.map
+        const price = this.eventInformation.datesEvent.filter(item=> item.date === e.target.value)[0].price;
+        console.log(this.titulaires)
+
         //Suivant le jour selectionner -> faire apparaitre le bon prix
-        this.prixTotal = this.prixTotal + this.eventDetail.price;
+        this.prixTotal = this.prixTotal + price;
         this.prixTotal = this.prixTotal - this.previousPrice;
-        this.previousPrice = this.eventDetail.price;
+        this.previousPrice = price;
     },
     ajouterTitulaire() {
       const nouvelId = this.titulaires.length + 1;
@@ -262,7 +263,7 @@ export default {
         console.log(listOfBillet)
     },
     async validatePanier(){
-        await axios.post('http://localhost:8080/api/event/buy', {params:{idEvent:this.eventIdSelected, user:sessionStorage.getItem("loggedIn"), listOfBillet:listOfBillet}})
+        await axios.post('http://localhost:8080/api/event/buy', {params:{idEvent:this.eventIdSelected, user:sessionStorage.getItem("loggedIn"),prixTotal:this.prixTotal, billet:listOfBillet}})
         .then(response => {
           // Succès de la vérification
           this.eventInformation = response.data;
