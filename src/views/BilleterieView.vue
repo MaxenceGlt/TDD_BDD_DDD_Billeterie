@@ -259,10 +259,13 @@ export default {
     },
     displayPanier(){
         this.displayPanierToggle = true;
-        console.log(listOfBillet)
     },
     async validatePanier(){
         const listOfBillet = [...this.titulaires, ...this.titulairesPass]
+        console.log(listOfBillet)
+        console.log(this.eventIdSelected)
+        console.log(sessionStorage.getItem("loggedIn"))
+
         await axios.post('http://localhost:8080/api/event/buy', {params:{idEvent:this.eventIdSelected, user:sessionStorage.getItem("loggedIn"),prixTotal:this.prixTotal, billet:listOfBillet}})
         .then(response => {
           // Succès de la vérification

@@ -12,7 +12,10 @@ const router = createRouter({
     {
       path: '/home',
       name: 'HomeComposent',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/HomeView.vue'),
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/about',
@@ -20,17 +23,26 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/AboutView.vue'),
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/billeterie',
       name: 'BilleterieComposent',
-      component: () => import('../views/BilleterieView.vue')
+      component: () => import('../views/BilleterieView.vue'),
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/admin',
       name: 'AdminComposent',
-      component: () => import('../views/AdminView.vue')
+      component: () => import('../views/AdminView.vue'),
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -38,7 +50,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.path === '/admin') {
     // Récuperer l'info de si l'utilisateur est un admin
-    const isAuthenticated = true// Logique d'authentification ici
+    const isAuthenticated = sessionStorage.getItem("isAdmin")// Logique d'authentification ici
 
     if(!isAuthenticated) {
       // Redirigez l'utilisateur vers une autre page ou affichez un message d'erreur
@@ -49,6 +61,24 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // Laissez l'accès à toutes les autres URLs
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  const isConnected = sessionStorage.getItem('loggedIn');
+  console.log(isConnected)
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    // La route nécessite une authentification
+    if (isConnected) {
+      // L'utilisateur est connecté, poursuivre la navigation
+      next();
+    } else {
+      // L'utilisateur n'est pas connecté, rediriger vers la page de connexion
+      next('/');
+    }
+  } else {
+    // La route n'a pas besoin d'authentification, poursuivre la navigation
     next();
   }
 });
