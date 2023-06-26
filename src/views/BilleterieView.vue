@@ -14,7 +14,7 @@
                 <div className='px-16'>
                     <hr className='mb-2'>
                 </div> 
-                <img class="rounded-xl" :src="lyonEsportImg">
+                <img class="rounded-xl" :src="lyonEsportImg" alt="Image de l'évènement">
                 <br>
                 <span class="text-lg text-cyan-300 place-self-center font-spegiel-bold uppercase md:text-xl lg:text-lg xl:text-xl">{{item.nameEvent}}</span>
                 <br>
@@ -239,12 +239,8 @@ export default {
       this.previousPrice = 0;
     },
     supprimerTitulaire(titulaire) {
-        if((titulaire.date !== '') && (titulaire.name !== '') && (titulaire.prenom !== '')){
-            this.prixTotal = this.prixTotal - this.data.prixUnit;
-        }else if((titulaire.date !== '') && ((titulaire.name !== '') || (titulaire.prenom !== '')) ){
-            this.prixTotal = this.prixTotal - this.data.prixUnit;
-        }else if((titulaire.date !== '') && ((titulaire.name == '') || (titulaire.prenom == '')) ){
-            this.prixTotal = this.prixTotal - this.data.prixUnit;
+        if (titulaire.date !== '' && (titulaire.name !== '' || titulaire.prenom !== '') || (titulaire.date !== '' && titulaire.name === '' && titulaire.prenom === '')) {
+            this.prixTotal -= this.data.prixUnit;
         }
         this.titulaires = this.titulaires.filter(item => item.id !== titulaire.id);
     },

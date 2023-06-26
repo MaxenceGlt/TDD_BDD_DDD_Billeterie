@@ -61,9 +61,6 @@ export default {
           this.error = 'Une erreur s\'est produite lors de la connexion.';
           console.error(error);
         });
-        //if(this.username=='admin' && this.password=='admin'){
-          //this.$router.push('/home');
-        //}
     }
   }
 };
